@@ -1,6 +1,6 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { css } from '@emotion/css';
+import React from "react";
+import { NavLink } from "react-router-dom";
+import { css } from "@emotion/css";
 
 const NavStyles = css`
   margin-bottom: 15px;
@@ -17,10 +17,14 @@ const NavStyles = css`
 `;
 
 const Nav = () => (
-    <nav className={NavStyles}>
-        <NavLink to="/" activeClassName="active" end>Products</NavLink>
-        <NavLink to="/admin" activeStyle={{fontStyle: 'italic', fontWeight: 900}}>Admin</NavLink>
-    </nav>
-  )
+  <nav className={NavStyles}>
+    <NavLink to="/" activeClassName="active" end>
+      Products
+    </NavLink>
+    <NavLink to="/admin" activeStyle={{ fontStyle: "italic", fontWeight: 900 }}>
+      Admin
+    </NavLink>
+  </nav>
+);
 
 export default Nav;

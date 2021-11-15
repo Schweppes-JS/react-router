@@ -1,6 +1,9 @@
-import React from 'react';
-import { Outlet } from 'react-router';
-import { css } from '@emotion/css';
+import { Routes, Route } from "react-router";
+import { css } from "@emotion/css";
+import React from "react";
+
+import ProductsIndex from "./ProductsIndex";
+import Product from "./Product";
 
 const ProductsStyles = css`
   display: flex;
@@ -14,11 +17,13 @@ const ProductsStyles = css`
 const Products = () => {
   return (
     <div className={ProductsStyles}>
-      <img  src="/assets/img/logo.svg" alt="Ultimate Burgers" className="Logo"/>
-      <Outlet />
+      <img src="/assets/img/logo.svg" alt="Ultimate Burgers" className="Logo" />
+      <Routes>
+        <Route path="/" element={<ProductsIndex />} />
+        <Route path=":id" element={<Product />} />
+      </Routes>
     </div>
-      
-  )
-}
+  );
+};
 
 export default Products;

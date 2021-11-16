@@ -1,30 +1,70 @@
-import React, { useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { css } from "@emotion/css";
 
-import { createProduct } from "./ProductsService";
+import { createProduct, retrieveProduct, updateProduct, deleteProduct } from "./ProductsService";
 
 const ProductEditStyles = css`
   color: #fff;
   background: #2a2c37;
   padding: 15px;
   border-radius: 6px;
+  .ProductEdit {
+    &-Input {
+      width: 100%;
+      border: 1px solid transparent;
+      color: #fff;
+      background: #1d1e26;
+      padding: 10px 15px;
+      margin-bottom: 5px;
+      border-radius: 6px;
+      outline: 0;
+      &:focus {
+        border-color: #50fa7b;
+      }
+    }
+    &-Textarea {
+      min-heigth: 80px;
+      resize: none;
+    }
+    &-Button {
+      border: 2px solid #50fa7b;
+      color: #50fa7b;
+      background: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      outline: 0;
+      cursor: pointer;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+  }
 `;
 
-// {
-//   "id": "big-cheese",
-//   "name": "Big Cheese",
-//   "description": "Large burger, all the cheese.",
-//   "price": 749
-// },
-
-const ProductEdit = () => {
+const ProductEdit = ({ isEdit }) => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     id: "",
     name: "",
     price: 0,
     description: "",
   });
+
+  useEffect(() => {
+    if (!isEdit) {
+      return;
+    }
+    (async () => {
+      try {
+        const product = await retrieveProduct(id);
+        setForm(product);
+      } catch (e) {
+        console.warn(e);
+        navigate(`/admin`, { replace: true });
+      }
+    })();
+  }, [id]);
 
   const updateField = ({ name, value }) => {
     setForm({
@@ -35,7 +75,30 @@ const ProductEdit = () => {
 
   const handleCreate = async () => {
     try {
-      const created = await createProduct(form);
+      const { id } = await createProduct(form);
+      navigate(`/admin/${id}`);
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      await updateProduct(form);
+      alert(`Updated ${form.name}`);
+      navigate(`/admin`);
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm(`Really delelete ${form.name}`)) {
+      return;
+    }
+    try {
+      await deleteProduct(form.id);
+      navigate(`/admin`);
     } catch (e) {
       console.warn(e);
     }
@@ -43,7 +106,6 @@ const ProductEdit = () => {
 
   return (
     <form className={ProductEditStyles}>
-      {JSON.stringify(form)}
       <input type="text" name="id" placeholder="ID" className="ProductEdit-Input" value={form.id} onChange={({ target }) => updateField(target)} />
       <input
         type="text"
@@ -68,9 +130,21 @@ const ProductEdit = () => {
         className="ProductEdit-Input ProductEdit-Textarea"
         onChange={({ target }) => updateField(target)}
       />
-      <button type="button" className="ProductEdit-Button" onClick={handleCreate}>
-        Create
-      </button>
+      {!isEdit && (
+        <button type="button" className="ProductEdit-Button" onClick={handleCreate}>
+          Create
+        </button>
+      )}
+      {isEdit && (
+        <button type="button" className="ProductEdit-Button" onClick={handleUpdate}>
+          Update
+        </button>
+      )}
+      {isEdit && (
+        <button type="button" className="ProductEdit-Button" onClick={handleDelete}>
+          Delete
+        </button>
+      )}
     </form>
   );
 };

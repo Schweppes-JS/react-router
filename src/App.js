@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { css } from "@emotion/css";
 
 import Products from "./Products/Products";
+import ScrollToTop from "./Common/ScrollToTop";
 import ProtectedRoute from "./Common/ProtectedRoute";
 import Admin from "./Admin/Admin";
 import Nav from "./Common/Nav";
@@ -24,6 +25,7 @@ const App = () => {
   return (
     <div className={AppStyles}>
       <Router>
+        <ScrollToTop />
         <div className="Container">
           <Nav />
           <Routes>

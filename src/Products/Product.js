@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router";
-import { css } from "@emotion/css";
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { css } from '@emotion/css';
 
-import { retrieveProduct } from "./ProductsService";
+import { retrieveProduct } from './ProductsService';
 
 const ProductStyles = css`
   color: #fff;
@@ -33,9 +33,9 @@ const ProductStyles = css`
       color: #50fa7b;
       background: none;
       padding: 10px 15px;
-      margin-rigth; 5px;
+      margin-right: 5px;
       border-radius: 6px;
-      outline: none;
+      outline: 0;
       cursor: pointer;
       font-weight: 600;
       text-transform: uppercase;
@@ -55,7 +55,7 @@ const Product = () => {
         setProduct(product);
       } catch (e) {
         console.warn(e);
-        navigate("/", { replace: true, state: { id } });
+        navigate('/', { replace: true, state: { id } });
       }
     })();
   }, [id]);
@@ -63,10 +63,15 @@ const Product = () => {
   if (product === null) {
     return <div>Loading...</div>;
   }
+
   return (
     <div className={ProductStyles}>
       <div className="Product-Title">
-        <img src={`/assets/img/products/${product.id}.svg`} alt={product.name} className="Product-Icon" />
+        <img
+          src={`/assets/img/products/${product.id}.svg`}
+          alt={product.name}
+          className="Product-Icon"
+        />
         <div>
           <h1 className="Product-Name">{product.name}</h1>
           <p className="Product-Price">{`$${product.price / 100}`}</p>
@@ -74,7 +79,11 @@ const Product = () => {
       </div>
       <div className="Product-Description">
         <p>{product.description}</p>
-        <button type="button" className="Product-Button" onClick={() => navigate(-1)}>
+        <button
+          type="button"
+          className="Product-Button"
+          onClick={() => navigate(-1)}
+        >
           Back
         </button>
       </div>

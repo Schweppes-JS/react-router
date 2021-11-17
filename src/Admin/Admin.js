@@ -1,9 +1,13 @@
-import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
-import { css } from "@emotion/css";
+import React, { lazy } from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
+import { css } from '@emotion/css';
 
-import ProductsIndex from "../Products/ProductsIndex";
-import ProductEdit from "../Products/ProductEdit";
+// import ProductEdit from '../Products/ProductEdit';
+// import ProductsIndex from '../Products/ProductsIndex';
+import Loadable from '../Common/Loadable';
+
+const ProductEdit = Loadable(lazy(() => import('../Products/ProductEdit')));
+const ProductsIndex = Loadable(lazy(() => import('../Products/ProductsIndex')));
 
 const AdminStyles = css`
   .Admin {
@@ -24,22 +28,21 @@ const AdminStyles = css`
   }
 `;
 
-const Admin = () => {
-  return (
-    <div className={AdminStyles}>
-      <div className="Admin-Header">
-        <h1>Admin</h1>
-        <Link to="new" className="Admin-New">
-          New
-        </Link>
-      </div>
-      <Routes>
-        <Route path="/" element={<ProductsIndex />} />
-        <Route path="/new" element={<ProductEdit isEdit={false} />} />
-        <Route path="/:id" element={<ProductEdit isEdit={true} />} />
-      </Routes>
+const Admin = () => (
+  <div className={AdminStyles}>
+    <div className="Admin-Header">
+      <h1>Admin</h1>
+      <Link to="new" className="Admin-New">
+        New
+      </Link>
     </div>
-  );
-};
+
+    <Routes>
+      <Route path="/" element={<ProductsIndex />} />
+      <Route path="/new" element={<ProductEdit isEdit={false} />} />
+      <Route path="/:id" element={<ProductEdit isEdit={true} />} />
+    </Routes>
+  </div>
+);
 
 export default Admin;

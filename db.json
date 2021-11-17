@@ -1,6 +1,18 @@
 {
   "products": [
     {
+      "id": "the-wedge",
+      "name": "The Wedge",
+      "description": "Tasty sandwich to max your tastebuds.",
+      "price": 699
+    },
+    {
+      "id": "spice-dog",
+      "name": "Spice Dog",
+      "description": "Prepare the spice, it's very nice.",
+      "price": 799
+    },
+    {
       "id": "french-fries",
       "name": "French Fries",
       "description": "That side you've been missing.",
@@ -33,20 +45,8 @@
     {
       "id": "big-cheese",
       "name": "Big Cheese",
-      "price": 749,
+      "price": 899,
       "description": "Large burger, all the cheese."
-    },
-    {
-      "id": "123",
-      "name": "asda",
-      "price": 12321,
-      "description": "dsasd"
-    },
-    {
-      "id": "big-cheesea",
-      "name": "Big Cheese",
-      "price": 123213,
-      "description": "123"
     }
   ]
 }

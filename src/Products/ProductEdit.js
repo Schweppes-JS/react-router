@@ -1,14 +1,19 @@
-import { useNavigate, useParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import { css } from "@emotion/css";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { css } from '@emotion/css';
 
-import { createProduct, retrieveProduct, updateProduct, deleteProduct } from "./ProductsService";
+import {
+  createProduct,
+  retrieveProduct,
+  updateProduct,
+  deleteProduct,
+} from './ProductsService';
 
 const ProductEditStyles = css`
   color: #fff;
   background: #2a2c37;
-  padding: 15px;
   border-radius: 6px;
+  padding: 15px;
   .ProductEdit {
     &-Input {
       width: 100%;
@@ -24,7 +29,7 @@ const ProductEditStyles = css`
       }
     }
     &-Textarea {
-      min-heigth: 80px;
+      min-height: 80px;
       resize: none;
     }
     &-Button {
@@ -44,17 +49,19 @@ const ProductEditStyles = css`
 const ProductEdit = ({ isEdit }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    id: "",
-    name: "",
-    price: 0,
-    description: "",
-  });
+  const [form, setForm] = useState(null);
 
   useEffect(() => {
     if (!isEdit) {
+      setForm({
+        id: '',
+        name: '',
+        price: 0,
+        description: '',
+      });
       return;
     }
+
     (async () => {
       try {
         const product = await retrieveProduct(id);
@@ -93,7 +100,7 @@ const ProductEdit = ({ isEdit }) => {
   };
 
   const handleDelete = async () => {
-    if (!window.confirm(`Really delelete ${form.name}`)) {
+    if (!window.confirm(`Really delete ${form.name}?`)) {
       return;
     }
     try {
@@ -104,9 +111,20 @@ const ProductEdit = ({ isEdit }) => {
     }
   };
 
+  if (form === null) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <form className={ProductEditStyles}>
-      <input type="text" name="id" placeholder="ID" className="ProductEdit-Input" value={form.id} onChange={({ target }) => updateField(target)} />
+      <input
+        type="text"
+        name="id"
+        placeholder="ID"
+        className="ProductEdit-Input"
+        value={form.id}
+        onChange={({ target }) => updateField(target)}
+      />
       <input
         type="text"
         name="name"
@@ -118,30 +136,46 @@ const ProductEdit = ({ isEdit }) => {
       <input
         type="text"
         name="price"
-        value={form.price}
         placeholder="Price"
         className="ProductEdit-Input"
-        onChange={({ target }) => updateField({ name: target.name, value: parseInt(target.value, 10) })}
+        value={form.price}
+        onChange={({ target }) =>
+          updateField({ name: target.name, value: parseInt(target.value, 10) })
+        }
       />
       <textarea
-        value={form.description}
         name="description"
         placeholder="Description"
         className="ProductEdit-Input ProductEdit-Textarea"
+        value={form.description}
         onChange={({ target }) => updateField(target)}
       />
       {!isEdit && (
-        <button type="button" className="ProductEdit-Button" onClick={handleCreate}>
+        <button
+          type="button"
+          className="ProductEdit-Button"
+          onClick={handleCreate}
+        >
           Create
         </button>
       )}
+
       {isEdit && (
-        <button type="button" className="ProductEdit-Button" onClick={handleUpdate}>
+        <button
+          type="button"
+          className="ProductEdit-Button"
+          onClick={handleUpdate}
+        >
           Update
         </button>
       )}
+
       {isEdit && (
-        <button type="button" className="ProductEdit-Button" onClick={handleDelete}>
+        <button
+          type="button"
+          className="ProductEdit-Button"
+          onClick={handleDelete}
+        >
           Delete
         </button>
       )}

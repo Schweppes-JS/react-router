@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
-import { css } from '@emotion/css';
+import React, { useState, useEffect } from "react";
+import { useLocation, useSearchParams } from "react-router-dom";
+import { css } from "@emotion/css";
 
-import ProductCard from './ProductCard';
+import ProductCard from "./ProductCard.js";
+import { listProducts } from "./ProductsService";
 
-import { listProducts } from './ProductsService';
-
-const ProductsIndexStyles = css`
+const ProductIndexStyles = css`
   .ProductsIndex {
     &-List {
       margin-top: 10px;
@@ -30,10 +29,9 @@ const ProductsIndexStyles = css`
 `;
 
 const ProductsIndex = () => {
-  const { state } = useLocation();
   const [products, setProducts] = useState(null);
+  const { state } = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-
   useEffect(() => {
     if (state) {
       console.warn(`Nothing found for ${state.id}`);
@@ -53,14 +51,14 @@ const ProductsIndex = () => {
       setProducts(data);
       return;
     }
-
     const sorted = [...data].sort((x, y) => {
       const { sort, order } = params;
+      console.log(sort, order);
       switch (order) {
-        case 'ascending': {
+        case "ascending": {
           return x[sort] > y[sort] ? 1 : -1;
         }
-        case 'descending': {
+        case "descending": {
           return x[sort] < y[sort] ? 1 : -1;
         }
         default: {
@@ -81,63 +79,39 @@ const ProductsIndex = () => {
 
   if (products === null) {
     return <div>Loading...</div>;
+  } else {
+    return (
+      <div className={ProductIndexStyles}>
+        <div className="ProductsIndex-Radios">
+          <span>Sort:</span>
+          <label>
+            Name
+            <input type="radio" name="sort" value="name" onChange={updateParams} defaultChecked={searchParams.get("sort") === "name"} />
+          </label>
+          <label>
+            Price
+            <input type="radio" name="sort" value="price" onChange={updateParams} defaultChecked={searchParams.get("sort") === "price"} />
+          </label>
+        </div>
+        <div className="ProductsIndex-Radios">
+          <span>Order:</span>
+          <label>
+            Ascending
+            <input type="radio" name="order" value="ascending" onChange={updateParams} defaultChecked={searchParams.get("order") === "ascending"} />
+          </label>
+          <label>
+            Descending
+            <input type="radio" name="order" value="descending" onChange={updateParams} defaultChecked={searchParams.get("order") === "descending"} />
+          </label>
+        </div>
+        <div className="ProductsIndex-List">
+          {products.map((item) => (
+            <ProductCard product={item} key={item.id} />
+          ))}
+        </div>
+      </div>
+    );
   }
-
-  return (
-    <div className={ProductsIndexStyles}>
-      <div className="ProductsIndex-Radios">
-        <span>Sort:</span>
-        <label>
-          Name
-          <input
-            type="radio"
-            name="sort"
-            value="name"
-            onChange={updateParams}
-            defaultChecked={searchParams.get('sort') === 'name'}
-          />
-        </label>
-        <label>
-          Price
-          <input
-            type="radio"
-            name="sort"
-            value="price"
-            onChange={updateParams}
-            defaultChecked={searchParams.get('sort') === 'price'}
-          />
-        </label>
-      </div>
-      <div className="ProductsIndex-Radios">
-        <span>Order:</span>
-        <label>
-          Ascending
-          <input
-            type="radio"
-            name="order"
-            value="ascending"
-            onChange={updateParams}
-            defaultChecked={searchParams.get('order') === 'ascending'}
-          />
-        </label>
-        <label>
-          Descending
-          <input
-            type="radio"
-            name="order"
-            value="descending"
-            onChange={updateParams}
-            defaultChecked={searchParams.get('order') === 'descending'}
-          />
-        </label>
-      </div>
-      <div className="ProductsIndex-List">
-        {products.map((item) => (
-          <ProductCard product={item} key={item.id} />
-        ))}
-      </div>
-    </div>
-  );
 };
 
 export default ProductsIndex;

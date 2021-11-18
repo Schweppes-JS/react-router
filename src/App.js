@@ -1,16 +1,11 @@
-import React, { lazy, useState } from 'react';
-import { BrowserRouter as Router, Navigate, useRoutes } from 'react-router-dom';
-import { css } from '@emotion/css';
+import React, { useState } from "react";
+import { BrowserRouter as Router, useRoutes, Navigate } from "react-router-dom";
+import { css } from "@emotion/css";
 
-import Nav from './Common/Nav';
-import Loadable from './Common/Loadable';
-import ScrollToTop from './Common/ScrollToTop';
-// import ProtectedRoute from './Common/ProtectedRoute';
-// import Products from './Products/Products';
-// import Admin from './Admin/Admin';
-
-const Products = Loadable(lazy(() => import('./Products/Products')));
-const Admin = Loadable(lazy(() => import('./Admin/Admin')));
+import Products from "./Products/Products";
+import ScrollToTop from "./Common/ScrollToTop";
+import Admin from "./Admin/Admin";
+import Nav from "./Common/Nav";
 
 const AppStyles = css`
   margin: 50px auto;
@@ -27,21 +22,26 @@ const App = () => {
   const [authenticated] = useState(true);
   const routes = useRoutes([
     {
-      path: '/*',
+      path: "/*",
       element: <Products />,
     },
     {
-      path: '/admin*',
+      path: "/admin*",
       element: authenticated ? <Admin /> : <Navigate to="/" />,
     },
     {
-      path: '*',
+      path: "/*",
       element: <Navigate to="/" />,
     },
   ]);
-
   return routes;
 };
+
+/* <Routes>
+  <Route path="/*" element={<Products />} />
+  <ProtectedRoute path="/admin*" element={<Admin />} redirectTo="/" authenticated={authenticated} />
+  <Route path="*" element={<Navigate to="/" />} />
+</Routes> */
 
 const AppWrapper = () => (
   <div className={AppStyles}>
